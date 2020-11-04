@@ -17,7 +17,9 @@ class SceneViewer
 	GLint modelMatrixID = -1;
 	GLint viewMatrixID = -1;
 	GLint projectionMatrixID = -1;
+
 	GLint texturesCountID = -1;
+	GLuint texturesID[2];
 
 	void genProgram();
 
@@ -26,7 +28,7 @@ public:
 	~SceneViewer();
 
 	void setModelMatrix(glm::mat4 matrix);
-	void useTextures(bool use);
+	void useTextures(int textureCounts, GLuint textures[]);
 	void swapBuffers();
 };
 

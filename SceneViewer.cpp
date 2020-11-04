@@ -79,7 +79,9 @@ SceneViewer::SceneViewer(int w, int h)
 
     // texture uniform
     this->texturesCountID = glGetUniformLocation(shaderProgram, "texturesCount");
-    glUniform1i(texturesCountID, 0); // 1 to use texture
+    glUniform1i(texturesCountID, 1); // 1 to use texture
+    this->texturesID[0] = glGetUniformLocation(shaderProgram, "texture1");
+    this->texturesID[1] = glGetUniformLocation(shaderProgram, "texture2");
 
     /* Enable Z depth testing so objects closest to the viewpoint are in front */
     glEnable(GL_DEPTH_TEST);
@@ -96,9 +98,20 @@ void SceneViewer::setModelMatrix(glm::mat4 matrix)
     glUniformMatrix4fv(this->modelMatrixID, 1, GL_FALSE, value_ptr(matrix));
 }
 
-void SceneViewer::useTextures(bool use)
+void SceneViewer::useTextures(int textureCounts, GLuint textures[])
 {
-    glUniform1i(texturesCountID, use ? 1 : 0); // 1 to use texture
+    glUniform1i(texturesCountID, textureCounts);
+
+    if (textureCounts >= 1) {
+        glActiveTexture(GL_TEXTURE0 + 3); // use Texture Unit 3 just because...
+        glBindTexture(GL_TEXTURE_2D, textures[0]);
+        glUniform1i(this->texturesID[0], 3);
+        if (textureCounts >= 2) {
+            glActiveTexture(GL_TEXTURE0 + 5);
+            glBindTexture(GL_TEXTURE_2D, textures[1]);
+            glUniform1i(this->texturesID[1], 5);
+        }
+    }
 }
 
 void SceneViewer::swapBuffers()

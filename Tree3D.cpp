@@ -23,6 +23,6 @@ Tree3D::~Tree3D() {
 	}
 }
 
-void Tree3D::draw() {
-	treeModel->draw();
+void Tree3D::draw(SceneViewer *v) {
+	treeModel->draw(v);
 }

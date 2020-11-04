@@ -74,9 +74,10 @@ int main(int argc, char* argv[])
         glm::translate(tree3->transform, glm::vec3(2.0f, 0.0f, -2.0f));
     scene.add(tree3);
 
-    //House3D* house = new House3D();
-    //house->transform = glm::translate(glm::mat4(1.0f), glm::vec3(-1, 0, -10));
-    //scene.add(house);
+    House3D* house = new House3D();
+    house->transform = glm::translate(glm::mat4(1.0f), glm::vec3(-1, 0, -10));
+    house->transform = glm::rotate(house->transform, glm::radians(30.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+    scene.add(house);
 
     SDL_Event windowEvent;
     while (true)

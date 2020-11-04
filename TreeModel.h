@@ -1,6 +1,7 @@
 #pragma once
 
 #include <glad/glad.h>
+#include "SceneViewer.h"
 
 class TreeModel
 {
@@ -9,6 +10,6 @@ class TreeModel
 
 public:
 	TreeModel();
-	void draw();
+	void draw(SceneViewer* viewer);
 };
 

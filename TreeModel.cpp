@@ -86,11 +86,11 @@ TreeModel::TreeModel()
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image->w, image->h, 0, GL_RGB,
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image->w, image->h, 0, GL_BGR,
 			GL_UNSIGNED_BYTE, image->pixels);
 		// glGenerateMipmap(GL_TEXTURE_2D);
 	}
-	//free(image);
+	SDL_FreeSurface(image);
 
 	// indices
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo[3]);
@@ -98,10 +98,11 @@ TreeModel::TreeModel()
 
 }
 
-void TreeModel::draw()
+void TreeModel::draw(SceneViewer *viewer)
 {
-	glActiveTexture(GL_TEXTURE0); // activate the texture unit
-	glBindTexture(GL_TEXTURE_2D, texture);
+	GLuint t[] = { this->texture };
+	viewer->useTextures(1, t);
+
 	glBindVertexArray(vao);
 	glDrawElements(GL_TRIANGLE_STRIP, 8, GL_UNSIGNED_INT, 0);
 	glDrawElements(GL_TRIANGLE_FAN, 5, GL_UNSIGNED_INT, (void*)(8*sizeof(GLuint)));

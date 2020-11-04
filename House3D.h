@@ -6,6 +6,6 @@ public:
 	House3D();
 	~House3D();
 
-	void draw();
+	void draw(SceneViewer* v);
 };
 

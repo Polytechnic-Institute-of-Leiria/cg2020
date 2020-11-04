@@ -21,6 +21,6 @@ House3D::~House3D() {
 	}
 }
 
-void House3D::draw() {
-	houseModel->draw();
+void House3D::draw(SceneViewer *viewer) {
+	houseModel->draw(viewer);
 }

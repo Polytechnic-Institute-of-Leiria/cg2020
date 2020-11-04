@@ -13,7 +13,7 @@ void Scene::draw(SceneViewer* viewer)
 	for (Object3D* o : this->objects)
 	{
 		viewer->setModelMatrix(o->transform);
-		o->draw();
+		o->draw(viewer);
 	}
 }
 

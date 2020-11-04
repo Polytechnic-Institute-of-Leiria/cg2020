@@ -6,6 +6,6 @@ public:
 	Tree3D();
 	~Tree3D();
 
-	void draw();
+	void draw(SceneViewer* v);
 };
 

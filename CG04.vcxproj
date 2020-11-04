@@ -166,7 +166,10 @@
     <ClInclude Include="TreeModel.h" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="clay256.bmp" />
+    <Image Include="hedge256.bmp" />
     <Image Include="pine-tree.bmp" />
+    <Image Include="wallstone256.bmp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

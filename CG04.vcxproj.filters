@@ -78,5 +78,14 @@
     <Image Include="pine-tree.bmp">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="clay256.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="hedge256.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="wallstone256.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>
