@@ -1,17 +1,18 @@
 #include "Scene.h"
 
 #include <glm/ext.hpp>
+#include "SceneViewer.h"
 
 void Scene::add(Object3D* obj)
 {
 	this->objects.push_back(obj);
 }
 
-void Scene::draw(GLuint modelMatrixId)
+void Scene::draw(SceneViewer* viewer)
 {
 	for (Object3D* o : this->objects)
 	{
-		glUniformMatrix4fv(modelMatrixId, 1, GL_FALSE, value_ptr(o->transform));
+		viewer->setModelMatrix(o->transform);
 		o->draw();
 	}
 }

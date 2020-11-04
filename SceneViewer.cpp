@@ -77,6 +77,10 @@ SceneViewer::SceneViewer(int w, int h)
     projectionMatrixID = glGetUniformLocation(shaderProgram, "projection");
     glUniformMatrix4fv(projectionMatrixID, 1, GL_FALSE, value_ptr(projection));
 
+    // texture uniform
+    this->texturesCountID = glGetUniformLocation(shaderProgram, "texturesCount");
+    glUniform1i(texturesCountID, 0); // 1 to use texture
+
     /* Enable Z depth testing so objects closest to the viewpoint are in front */
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
@@ -85,6 +89,16 @@ SceneViewer::SceneViewer(int w, int h)
 SceneViewer::~SceneViewer()
 {
     SDL_DestroyWindow(window);
+}
+
+void SceneViewer::setModelMatrix(glm::mat4 matrix)
+{
+    glUniformMatrix4fv(this->modelMatrixID, 1, GL_FALSE, value_ptr(matrix));
+}
+
+void SceneViewer::useTextures(bool use)
+{
+    glUniform1i(texturesCountID, use ? 1 : 0); // 1 to use texture
 }
 
 void SceneViewer::swapBuffers()

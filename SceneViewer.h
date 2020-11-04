@@ -2,6 +2,7 @@
 
 #include <glad/glad.h>
 #include <SDL.h>
+#include <glm/glm.hpp>
 
 class SceneViewer
 {
@@ -13,6 +14,10 @@ class SceneViewer
 
 	GLuint shaderProgram = -1;
 	
+	GLint modelMatrixID = -1;
+	GLint viewMatrixID = -1;
+	GLint projectionMatrixID = -1;
+	GLint texturesCountID = -1;
 
 	void genProgram();
 
@@ -20,10 +25,8 @@ public:
 	SceneViewer(int w, int h);
 	~SceneViewer();
 
-	GLint modelMatrixID = -1;
-	GLint viewMatrixID = -1;
-	GLint projectionMatrixID = -1;
-
+	void setModelMatrix(glm::mat4 matrix);
+	void useTextures(bool use);
 	void swapBuffers();
 };
 

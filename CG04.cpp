@@ -92,7 +92,7 @@ int main(int argc, char* argv[])
         glClearColor(0.0, 0.0, 0.0, 1.0);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         
-        scene.draw(viewer.modelMatrixID);
+        scene.draw(&viewer);
 
         viewer.swapBuffers();
     }
