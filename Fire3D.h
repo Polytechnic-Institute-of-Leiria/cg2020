@@ -1,5 +1,7 @@
 #pragma once
 #include "Object3D.h"
+#include <glm/glm.hpp>
+
 class Fire3D : public Object3D
 {
 
@@ -7,7 +9,7 @@ class Fire3D : public Object3D
 	GLuint vbo[2];
 	GLuint textureId;
 
-	//int frame;
+	glm::vec2 textureOffset;
 
 	float textCoords[4][2] = {
 		{0.0f, 1.0f/4},

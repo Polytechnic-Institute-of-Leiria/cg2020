@@ -59,29 +59,29 @@ SceneViewer::SceneViewer(int w, int h)
     genProgram();
 
     // Model Matrix
-    glm::mat4 model = glm::mat4(1.0f);
+    //glm::mat4 model = glm::mat4(1.0f);
     modelMatrixID = glGetUniformLocation(shaderProgram, "model");
-    glUniformMatrix4fv(modelMatrixID, 1, GL_FALSE, value_ptr(model));
+    //glUniformMatrix4fv(modelMatrixID, 1, GL_FALSE, value_ptr(model)); // done by setModelMatrix
 
     // View Matrix
-    glm::mat4 view = glm::mat4(1.0f);
+    viewMatrix = glm::mat4(1.0f);
     // translating the scene in the reverse direction of where we want to move
     // moving 5 units on Z
-    view = glm::translate(view, glm::vec3(0.0f, -2.0f, -5.0f));
+    viewMatrix = glm::translate(viewMatrix, glm::vec3(0.0f, -2.0f, -5.0f));
     // set the view matrix value
     viewMatrixID = glGetUniformLocation(shaderProgram, "view");
-    glUniformMatrix4fv(viewMatrixID, 1, GL_FALSE, value_ptr(view));
+    glUniformMatrix4fv(viewMatrixID, 1, GL_FALSE, value_ptr(viewMatrix));
     // Projection Matrix
-    glm::mat4 projection;
-    projection = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
+    projectionMatrix = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
     projectionMatrixID = glGetUniformLocation(shaderProgram, "projection");
-    glUniformMatrix4fv(projectionMatrixID, 1, GL_FALSE, value_ptr(projection));
+    glUniformMatrix4fv(projectionMatrixID, 1, GL_FALSE, value_ptr(projectionMatrix));
 
     // texture uniform
     this->texturesCountID = glGetUniformLocation(shaderProgram, "texturesCount");
     glUniform1i(texturesCountID, 1); // 1 to use texture
     this->texturesID[0] = glGetUniformLocation(shaderProgram, "texture1");
     this->texturesID[1] = glGetUniformLocation(shaderProgram, "texture2");
+    this->textOffsetID = glGetUniformLocation(shaderProgram, "textOffset");
 
     /* Enable Z depth testing so objects closest to the viewpoint are in front */
     glEnable(GL_DEPTH_TEST);
@@ -93,16 +93,36 @@ SceneViewer::~SceneViewer()
     SDL_DestroyWindow(window);
 }
 
+void SceneViewer::rotateCamera(float angle, glm::vec3 axis)
+{
+    glm::mat4 r = glm::rotate(glm::mat4(1.0f), angle, axis);
+    this->viewMatrix = r * this->viewMatrix;
+    glUniformMatrix4fv(viewMatrixID, 1, GL_FALSE, value_ptr(viewMatrix));
+}
+
+void SceneViewer::translateCamera(glm::vec3 translation)
+{
+    glm::mat4 t = glm::translate(glm::mat4(1.0f), translation);
+    this->viewMatrix = t * this->viewMatrix;
+    glUniformMatrix4fv(viewMatrixID, 1, GL_FALSE, value_ptr(viewMatrix));
+}
+
 void SceneViewer::setModelMatrix(glm::mat4 matrix)
 {
     glUniformMatrix4fv(this->modelMatrixID, 1, GL_FALSE, value_ptr(matrix));
 }
 
-void SceneViewer::useTextures(int textureCounts, GLuint textures[])
+void SceneViewer::useTextures(int textureCounts, GLuint textures[], glm::vec2* textureOffset)
 {
     glUniform1i(texturesCountID, textureCounts);
-
+    if (textureOffset == nullptr) {
+        glUniform2fv(textOffsetID, 1, value_ptr(glm::vec2(0.0f)));
+    }
+    else {
+        glUniform2fv(textOffsetID, 1, value_ptr(*textureOffset));
+    }
     if (textureCounts >= 1) {
+
         glActiveTexture(GL_TEXTURE0 + 3); // use Texture Unit 3 just because...
         glBindTexture(GL_TEXTURE_2D, textures[0]);
         glUniform1i(this->texturesID[0], 3);

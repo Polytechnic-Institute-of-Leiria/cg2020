@@ -59,24 +59,27 @@ void Fire3D::setFrame(int frame)
 	int col = frame % IMAGE_COLS;
 	int row = frame / IMAGE_COLS;
 
-	// bottom left
-	textCoords[1][0] = 1.0f / IMAGE_COLS * col;
-	textCoords[1][1] = 1.0f / IMAGE_ROWS * row;
+	this->textureOffset.x = col * 1.0f / IMAGE_COLS;
+	this->textureOffset.y = row * 1.0f / IMAGE_ROWS;
 
-	// top left
-	textCoords[0][0] = textCoords[1][0];
-	textCoords[0][1] = textCoords[1][1] + 1.0f / IMAGE_ROWS;
+	//// bottom left
+	//textCoords[1][0] = 1.0f / IMAGE_COLS * col;
+	//textCoords[1][1] = 1.0f / IMAGE_ROWS * row;
 
-	// top right
-	textCoords[2][0] = textCoords[1][0] + 1.0f / IMAGE_COLS;
-	textCoords[2][1] = textCoords[0][1];
+	//// top left
+	//textCoords[0][0] = textCoords[1][0];
+	//textCoords[0][1] = textCoords[1][1] + 1.0f / IMAGE_ROWS;
 
-	// bottom right
-	textCoords[3][0] = textCoords[2][0];
-	textCoords[3][1] = textCoords[1][1];
+	//// top right
+	//textCoords[2][0] = textCoords[1][0] + 1.0f / IMAGE_COLS;
+	//textCoords[2][1] = textCoords[0][1];
 
-	glBindBuffer(GL_ARRAY_BUFFER, vbo[1]);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(textCoords), textCoords, GL_STATIC_DRAW);
+	//// bottom right
+	//textCoords[3][0] = textCoords[2][0];
+	//textCoords[3][1] = textCoords[1][1];
+
+	//glBindBuffer(GL_ARRAY_BUFFER, vbo[1]);
+	//glBufferData(GL_ARRAY_BUFFER, sizeof(textCoords), textCoords, GL_STATIC_DRAW);
 
 }
 
@@ -84,7 +87,7 @@ void Fire3D::draw(SceneViewer* v)
 {
 //	v->setModelMatrix(this->transform); // already done by the scene!
 	glBindVertexArray(vao);
-	v->useTextures(1, &textureId);
+	v->useTextures(1, &textureId, &this->textureOffset);
 	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 }
 

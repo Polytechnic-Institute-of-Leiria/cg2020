@@ -93,6 +93,24 @@ int main(int argc, char* argv[])
             if (windowEvent.type == SDL_QUIT) {
                 break;
             }
+            if (windowEvent.type == SDL_KEYDOWN) {
+                switch (windowEvent.key.keysym.sym) {
+                case SDLK_LEFT:
+                    viewer.rotateCamera(-M_PI / 40, glm::vec3(0.0f, 1.0f, 0.0f));
+                    break;
+                case SDLK_RIGHT:
+                    viewer.rotateCamera(M_PI / 40, glm::vec3(0.0f, 1.0f, 0.0f));
+                    break;
+                case SDLK_UP:
+                    viewer.translateCamera(glm::vec3(0.f, 0.0f, 0.1f));
+                    break;
+                case SDLK_DOWN:
+                    viewer.translateCamera(glm::vec3(0.0f, 0.0f, -0.1f));
+                    break;
+                default:
+                    break;
+                }
+            }
         }
         /* Game Loop */
         /* Make our background black */

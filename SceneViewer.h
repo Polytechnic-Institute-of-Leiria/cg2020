@@ -18,8 +18,12 @@ class SceneViewer
 	GLint viewMatrixID = -1;
 	GLint projectionMatrixID = -1;
 
+	glm::mat4 viewMatrix;
+	glm::mat4 projectionMatrix;
+
 	GLint texturesCountID = -1;
 	GLuint texturesID[2];
+	GLint textOffsetID = -1;
 
 	void genProgram();
 
@@ -27,8 +31,11 @@ public:
 	SceneViewer(int w, int h);
 	~SceneViewer();
 
+	void rotateCamera(float angle, glm::vec3 axis);
+	void translateCamera(glm::vec3 translation);
+
 	void setModelMatrix(glm::mat4 matrix);
-	void useTextures(int textureCounts, GLuint textures[]);
+	void useTextures(int textureCounts, GLuint textures[], glm::vec2* textureOffset = nullptr);
 	void swapBuffers();
 };
 
