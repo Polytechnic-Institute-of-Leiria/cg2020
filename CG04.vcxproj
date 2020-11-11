@@ -143,6 +143,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CG04.cpp" />
+    <ClCompile Include="Fire3D.cpp" />
     <ClCompile Include="glad\src\glad.c" />
     <ClCompile Include="House3D.cpp" />
     <ClCompile Include="HouseModel.cpp" />
@@ -157,6 +158,7 @@
     <None Include="cg03.vert" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Fire3D.h" />
     <ClInclude Include="House3D.h" />
     <ClInclude Include="HouseModel.h" />
     <ClInclude Include="Object3D.h" />
@@ -167,6 +169,7 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="clay256.bmp" />
+    <Image Include="fire8x4.bmp" />
     <Image Include="hedge256.bmp" />
     <Image Include="pine-tree.bmp" />
     <Image Include="wallstone256.bmp" />

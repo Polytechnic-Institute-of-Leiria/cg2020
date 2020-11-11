@@ -11,6 +11,7 @@
 #include "Scene.h"
 #include "Tree3D.h"
 #include "House3D.h"
+#include "Fire3D.h"
 
 GLuint genTriangle() {
     const GLfloat vertices2D[3][3] = {
@@ -79,7 +80,12 @@ int main(int argc, char* argv[])
     house->transform = glm::rotate(house->transform, glm::radians(30.0f), glm::vec3(0.0f, 1.0f, 0.0f));
     scene.add(house);
 
+    Fire3D* fire = new Fire3D();
+    scene.add(fire);
+    fire->transform = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -1.0f));
+
     SDL_Event windowEvent;
+    int frame = 0;
     while (true)
     {
         if (SDL_PollEvent(&windowEvent))
@@ -93,9 +99,11 @@ int main(int argc, char* argv[])
         glClearColor(0.0, 0.0, 0.0, 1.0);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         
+        fire->setFrame(frame);
         scene.draw(&viewer);
 
         viewer.swapBuffers();
+        frame++;
     }
 
     SDL_Quit();

@@ -42,6 +42,9 @@
     <ClCompile Include="House3D.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Fire3D.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="cg03.frag">
@@ -73,6 +76,9 @@
     <ClInclude Include="House3D.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Fire3D.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="pine-tree.bmp">
@@ -85,6 +91,9 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="wallstone256.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="fire8x4.bmp">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>
