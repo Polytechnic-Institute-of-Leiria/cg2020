@@ -12,6 +12,7 @@
 #include "Tree3D.h"
 #include "House3D.h"
 #include "Fire3D.h"
+#include "ModelLoader.h"
 
 GLuint genTriangle() {
     const GLfloat vertices2D[3][3] = {
@@ -84,8 +85,18 @@ int main(int argc, char* argv[])
     scene.add(fire);
     fire->transform = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -1.0f));
 
+    ModelLoader myModel("Pick-Up.blend");
+    Node3D* truck = nullptr;
+    if (myModel.root) {
+        scene.add(myModel.root);
+        truck = myModel.root->getNodeByName("Truck");
+    }
+
     SDL_Event windowEvent;
     int frame = 0;
+
+    bool cameraKeys[4] = { false, false, false, false };
+
     while (true)
     {
         if (SDL_PollEvent(&windowEvent))
@@ -93,25 +104,51 @@ int main(int argc, char* argv[])
             if (windowEvent.type == SDL_QUIT) {
                 break;
             }
-            if (windowEvent.type == SDL_KEYDOWN) {
+            if (windowEvent.type == SDL_KEYDOWN || windowEvent.type == SDL_KEYUP) {
                 switch (windowEvent.key.keysym.sym) {
                 case SDLK_LEFT:
-                    viewer.rotateCamera(-M_PI / 40, glm::vec3(0.0f, 1.0f, 0.0f));
+                    cameraKeys[0] = (windowEvent.type == SDL_KEYDOWN);
                     break;
                 case SDLK_RIGHT:
-                    viewer.rotateCamera(M_PI / 40, glm::vec3(0.0f, 1.0f, 0.0f));
+                    cameraKeys[1] = (windowEvent.type == SDL_KEYDOWN);
                     break;
                 case SDLK_UP:
-                    viewer.translateCamera(glm::vec3(0.f, 0.0f, 0.1f));
+                    cameraKeys[2] = (windowEvent.type == SDL_KEYDOWN);
                     break;
                 case SDLK_DOWN:
-                    viewer.translateCamera(glm::vec3(0.0f, 0.0f, -0.1f));
+                    cameraKeys[3] = (windowEvent.type == SDL_KEYDOWN);
+                    break;
+                case SDLK_w:
+                    if (truck) {
+                        glm::mat4 trans = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.1f));
+                        truck->transform = trans * truck->transform;
+                    }
+                    break;
+                case SDLK_s:
+                    if (truck) {
+                        glm::mat4 trans = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -0.1f));
+                        truck->transform = trans * truck->transform;
+                    }
                     break;
                 default:
                     break;
                 }
             }
         }
+
+        if (cameraKeys[0]) {
+            viewer.rotateCamera(-M_PI / 80, glm::vec3(0.0f, 1.0f, 0.0f));
+        }
+        if (cameraKeys[1]) {
+            viewer.rotateCamera(M_PI / 80, glm::vec3(0.0f, 1.0f, 0.0f));
+        }
+        if (cameraKeys[2]) {
+            viewer.translateCamera(glm::vec3(0.f, 0.0f, 0.05f));
+        }
+        if (cameraKeys[3]) {
+            viewer.translateCamera(glm::vec3(0.0f, 0.0f, -0.05f));
+        }
+
         /* Game Loop */
         /* Make our background black */
         glClearColor(0.0, 0.0, 0.0, 1.0);
