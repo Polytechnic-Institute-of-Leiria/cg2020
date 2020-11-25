@@ -24,6 +24,7 @@ class SceneViewer
 	GLint texturesCountID = -1;
 	GLuint texturesID[2];
 	GLint textOffsetID = -1;
+	GLint diffuseColorID = -1;
 
 	void genProgram();
 
@@ -36,6 +37,7 @@ public:
 
 	void setModelMatrix(glm::mat4 matrix);
 	void useTextures(int textureCounts, GLuint textures[], glm::vec2* textureOffset = nullptr);
+	void setDiffuseColor(glm::vec3 color);
 	void swapBuffers();
 };
 

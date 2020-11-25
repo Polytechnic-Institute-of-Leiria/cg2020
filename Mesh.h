@@ -5,11 +5,13 @@
 #include <vector>
 
 #include "SceneViewer.h"
+#include "Material.h"
 
 struct Vertex {
 	glm::vec3 Position;
 	glm::vec3 Color;
 	glm::vec2 TexCoords;
+	glm::vec3 Normal;
 };
 
 class Mesh {
@@ -18,10 +20,12 @@ class Mesh {
 	GLuint VAO;
 	std::vector<Vertex> vertices;
 	std::vector<unsigned int> indices;
+	Material* material;
+
 public:
 	// constructor
 	Mesh(std::vector<Vertex> vertices, std::vector<unsigned int>
-		indices);
+		indices, Material *m);
 	// render the mesh
 	void draw(SceneViewer* viewer);
 };

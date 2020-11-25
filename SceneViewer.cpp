@@ -83,9 +83,15 @@ SceneViewer::SceneViewer(int w, int h)
     this->texturesID[1] = glGetUniformLocation(shaderProgram, "texture2");
     this->textOffsetID = glGetUniformLocation(shaderProgram, "textOffset");
 
+    diffuseColorID = glGetUniformLocation(shaderProgram, "diffuseColor");
+
     /* Enable Z depth testing so objects closest to the viewpoint are in front */
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
+
+    // Enable blending
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 SceneViewer::~SceneViewer()
@@ -132,6 +138,11 @@ void SceneViewer::useTextures(int textureCounts, GLuint textures[], glm::vec2* t
             glUniform1i(this->texturesID[1], 5);
         }
     }
+}
+
+void SceneViewer::setDiffuseColor(glm::vec3 color)
+{
+    glUniform3fv(this->diffuseColorID, 1, value_ptr(color));
 }
 
 void SceneViewer::swapBuffers()

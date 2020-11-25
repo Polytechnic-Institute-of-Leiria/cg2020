@@ -102,7 +102,7 @@ void HouseModel::draw(SceneViewer* viewer)
 	glBindVertexArray(vao);
 
 	GLuint t[] = { this->textures[0], this->textures[2] };
-	viewer->useTextures(2, t);
+	viewer->useTextures(1, t);
 
 	glDrawArrays(GL_TRIANGLE_STRIP, 0, 13);
 

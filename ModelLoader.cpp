@@ -27,7 +27,14 @@ ModelLoader::ModelLoader(std::string const& path)
         cout << "ERROR::ASSIMP:: " << importer.GetErrorString() << endl;
         return;
     }
-        // process ASSIMP's root node recursively
+
+    // process all materials
+    for (int matIndex = 0; matIndex < scene->mNumMaterials ; matIndex++)
+    {
+        processMaterial(scene->mMaterials[matIndex]);
+    }
+
+    // process ASSIMP's root node recursively
     this->root = new Node3D();
     processNode(scene->mRootNode, scene, this->root);
 
@@ -56,11 +63,9 @@ Mesh ModelLoader::processMesh(aiMesh* mesh, const aiScene* scene)
     // data to fill
     vector<Vertex> vertices;
     vector<unsigned int> indices;
-    aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
-    aiColor3D color;
-    if (material != nullptr) {
-        material->Get(AI_MATKEY_COLOR_DIFFUSE, color);
-    }
+
+    Material *material = this->materials[mesh->mMaterialIndex];
+    
     for (unsigned int i = 0; i < mesh->mNumVertices; i++)
     {
         Vertex vertex;
@@ -72,10 +77,10 @@ Mesh ModelLoader::processMesh(aiMesh* mesh, const aiScene* scene)
         vector.z = mesh->mVertices[i].z;
         vertex.Position = vector;
         // colors
-        vector.x = color.r;
-        vector.y = color.g;
-        vector.z = color.b;
-        vertex.Color = vector;
+//        vector.x = color.r;
+//       vector.y = color.g;
+//        vector.z = color.b;
+//        vertex.Color = vector;
         // texture coordinates
         if (mesh->mTextureCoords[0])
         {
@@ -97,7 +102,59 @@ Mesh ModelLoader::processMesh(aiMesh* mesh, const aiScene* scene)
             indices.push_back(face.mIndices[j]);
     }
     // return a mesh object created from the extracted mesh data
-    return Mesh(vertices, indices);
-
+    return Mesh(vertices, indices, material);
 }
+
+void ModelLoader::processMaterial(aiMaterial* mat) {
+    static const aiTextureType types[] = {
+    aiTextureType_NONE,
+    aiTextureType_DIFFUSE,
+    aiTextureType_SPECULAR,
+    aiTextureType_AMBIENT,
+    aiTextureType_EMISSIVE,
+    aiTextureType_HEIGHT,
+    aiTextureType_NORMALS,
+    aiTextureType_SHININESS,
+    aiTextureType_OPACITY,
+    aiTextureType_DISPLACEMENT,
+    aiTextureType_LIGHTMAP,
+    aiTextureType_REFLECTION,
+    aiTextureType_BASE_COLOR,
+    aiTextureType_NORMAL_CAMERA,
+    aiTextureType_EMISSION_COLOR,
+    aiTextureType_METALNESS,
+    aiTextureType_DIFFUSE_ROUGHNESS,
+    aiTextureType_AMBIENT_OCCLUSION,
+    aiTextureType_UNKNOWN
+    };
+
+    const int typesCount = sizeof(types) / sizeof(types[0]);
+    // Only one texture per type
+    std::string* files[typesCount];
+    for (int s = 0; s < typesCount; s++) {
+        files[s] = nullptr;
+    }
+    for (unsigned int type = 0; type < typesCount; ++type) {
+        aiString name;
+        for (int j = 0; j < mat->GetTextureCount(types[type]); j++) {
+            mat->GetTexture(types[type], j, &name);
+            if (name.length > 0) {
+                files[type] = new std::string(name.C_Str());
+                printf("\t%i\t%i\t\'%s\'\n", j, types[type], name.C_Str());
+                break;
+            }
+        }
+    }
+    glm::vec3* diffuseColor = nullptr;
+    aiColor3D color;
+    if (AI_SUCCESS == mat->Get(AI_MATKEY_COLOR_DIFFUSE, color)) {
+        diffuseColor = new glm::vec3(color.r, color.g, color.b);
+    }
+    Material* m = new Material(std::string(mat->GetName().C_Str()), diffuseColor,
+        files[aiTextureType_DIFFUSE]);
+    if (m) {
+        this->materials.push_back(m);
+    }
+}
+
 

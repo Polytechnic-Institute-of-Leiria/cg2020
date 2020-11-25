@@ -54,6 +54,9 @@
     <ClCompile Include="Mesh.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Material.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="cg03.frag">
@@ -63,6 +66,12 @@
       <Filter>Resource Files</Filter>
     </None>
     <None Include="Pick-Up.blend">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="wooden watch tower.dae">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Old House 2 3D Models.dae">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>
@@ -100,6 +109,9 @@
     <ClInclude Include="Mesh.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Material.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="pine-tree.bmp">
@@ -115,6 +127,30 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="fire8x4.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="t_C.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Wood_Tower_Nor.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="House body .jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="House Bump.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Plants 1 mask .jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Plants 2 mask.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Plants 2.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Plants1.jpg">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

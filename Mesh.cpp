@@ -1,10 +1,11 @@
 #include "Mesh.h"
 #include "SceneViewer.h"
 
-Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices)
+Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, Material *m)
 {
 	this->vertices = vertices;
 	this->indices = indices;
+	this->material = m;
 
 	// create buffers/arrays
 	glGenVertexArrays(1, &VAO);
@@ -22,7 +23,7 @@ Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices)
 	// vertex Positions
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
-	// vertex normals
+	// vertex Colors
 	glEnableVertexAttribArray(1);
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex,
 		Color));
@@ -35,7 +36,18 @@ Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices)
 
 void Mesh::draw(SceneViewer* viewer)
 {
-	viewer->useTextures(0, nullptr);
+	if (this->material != nullptr) {
+		if (this->material->diffuseCount() > 0) {
+			viewer->useTextures(this->material->diffuseCount(), this->material->getDiffuseTextures());
+		}
+		else {
+			viewer->useTextures(0, nullptr);
+			viewer->setDiffuseColor(this->material->getDiffuseColor());
+		}
+	}
+	else {
+		viewer->useTextures(0, nullptr);
+	}
 	glBindVertexArray(VAO);
 	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);

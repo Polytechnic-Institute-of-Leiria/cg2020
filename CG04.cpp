@@ -81,16 +81,18 @@ int main(int argc, char* argv[])
     house->transform = glm::rotate(house->transform, glm::radians(30.0f), glm::vec3(0.0f, 1.0f, 0.0f));
     scene.add(house);
 
-    Fire3D* fire = new Fire3D();
-    scene.add(fire);
-    fire->transform = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -1.0f));
-
-    ModelLoader myModel("Pick-Up.blend");
+    ModelLoader myModel("Old House 2 3D Models.dae");
+    //ModelLoader myModel("wooden watch tower.dae");
     Node3D* truck = nullptr;
     if (myModel.root) {
         scene.add(myModel.root);
         truck = myModel.root->getNodeByName("Truck");
     }
+
+    Fire3D* fire = new Fire3D();
+    scene.add(fire);
+    fire->transform = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -1.0f));
+
 
     SDL_Event windowEvent;
     int frame = 0;

@@ -116,7 +116,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\luis.marcelino\source\repos\CG04\assimp-build\include;C:\Users\luis.marcelino\source\repos\CG04\glad\include;C:\Users\luis.marcelino\source\repos\CG04\glm\glm;C:\Users\luis.marcelino\source\repos\CG04\SDL2-devel-2.0.12-VC\SDL2-2.0.12\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\luis.marcelino\source\repos\CG04\stb-master;C:\Users\luis.marcelino\source\repos\CG04\assimp-build\include;C:\Users\luis.marcelino\source\repos\CG04\glad\include;C:\Users\luis.marcelino\source\repos\CG04\glm\glm;C:\Users\luis.marcelino\source\repos\CG04\SDL2-devel-2.0.12-VC\SDL2-2.0.12\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -147,6 +147,7 @@
     <ClCompile Include="glad\src\glad.c" />
     <ClCompile Include="House3D.cpp" />
     <ClCompile Include="HouseModel.cpp" />
+    <ClCompile Include="Material.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="ModelLoader.cpp" />
     <ClCompile Include="Node3D.cpp" />
@@ -159,12 +160,15 @@
   <ItemGroup>
     <None Include="cg03.frag" />
     <None Include="cg03.vert" />
+    <None Include="Old House 2 3D Models.dae" />
     <None Include="Pick-Up.blend" />
+    <None Include="wooden watch tower.dae" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Fire3D.h" />
     <ClInclude Include="House3D.h" />
     <ClInclude Include="HouseModel.h" />
+    <ClInclude Include="Material.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="ModelLoader.h" />
     <ClInclude Include="Node3D.h" />
@@ -178,8 +182,16 @@
     <Image Include="clay256.bmp" />
     <Image Include="fire8x4.bmp" />
     <Image Include="hedge256.bmp" />
+    <Image Include="House body .jpg" />
+    <Image Include="House Bump.jpg" />
     <Image Include="pine-tree.bmp" />
+    <Image Include="Plants 1 mask .jpg" />
+    <Image Include="Plants 2 mask.jpg" />
+    <Image Include="Plants 2.jpg" />
+    <Image Include="Plants1.jpg" />
+    <Image Include="t_C.png" />
     <Image Include="wallstone256.bmp" />
+    <Image Include="Wood_Tower_Nor.jpg" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
