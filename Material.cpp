@@ -3,14 +3,19 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
-Material::Material(std::string name, glm::vec3* diffuseColor, std::string* diffuseTextureFile)
+Material::Material(std::string name, glm::vec3* diffuseColor, GLfloat shininess, std::string
+	* diffuseTextureFile, std::string* normalTextureFile, std::string* alphaTextureFile)
 {
 	this->name = name;
 	this->diffuseColor = diffuseColor;
+	this->shininess = shininess;
 	this->diffuseTextureFile = diffuseTextureFile;
-	if (this->diffuseTextureFile != nullptr && !this->diffuseTextureFile->empty()) {
-		this->loadTexture();
-	}
+	this->normalTextureFile = normalTextureFile;
+	this->alphaTextureFile = alphaTextureFile;
+
+	this->diffuseTexture = loadTexture(this->diffuseTextureFile);
+	this->normalTexture = loadTexture(this->normalTextureFile);
+	this->alphaTexture = loadTexture(this->alphaTextureFile);
 }
 
 GLuint* Material::getDiffuseTextures()
@@ -23,19 +28,24 @@ GLuint* Material::getDiffuseTextures()
 	}
 }
 
-void Material::loadTexture()
+GLuint Material::loadTexture(std::string *texturefile)
 {
+	if (texturefile == nullptr || texturefile->empty()) {
+		return 0;
+	}
+
 	int width, height, nrChannels;
-	unsigned char* data = stbi_load(this->diffuseTextureFile->c_str(), &width, &height,
+	unsigned char* data = stbi_load(texturefile->c_str(), &width, &height,
 		&nrChannels, 0);
 	if (!data)
 	{
-		printf("Failed to load texture");
-		return;
+		printf("Failed to load texture %s", texturefile->c_str());
+		return 0;
 	}
 
-	glGenTextures(1, &this->diffuseTexture);
-	glBindTexture(GL_TEXTURE_2D, diffuseTexture);
+	GLuint textureId = 0;
+	glGenTextures(1, &textureId);
+	glBindTexture(GL_TEXTURE_2D, textureId);
 	// set the texture wrapping/filtering options (on the currently bound texture object)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -51,4 +61,6 @@ void Material::loadTexture()
 			GL_UNSIGNED_BYTE, data);
 	}
 	stbi_image_free(data);
+
+	return textureId;
 }

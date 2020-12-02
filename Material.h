@@ -7,12 +7,18 @@
 class Material {
 	std::string name;
 	glm::vec3* diffuseColor;
+	GLfloat shininess = 0;
 	std::string* diffuseTextureFile;
 	GLuint diffuseTexture = 0;
-	void loadTexture();
+	std::string* normalTextureFile;
+	GLuint normalTexture = 0;
+	std::string* alphaTextureFile;
+	GLuint alphaTexture = 0;
+
+	GLuint loadTexture(std::string* texturefile);
 public:
-	Material(std::string name, glm::vec3* diffuseColor, std::string
-		* diffuseTextureFile);
+	Material(std::string name, glm::vec3* diffuseColor, GLfloat shininess, std::string
+		* diffuseTextureFile, std::string* normalTextureFile, std::string* alphaTextureFile);
 
 	inline int diffuseCount() { return diffuseTexture ? 1 : 0; }
 	GLuint* getDiffuseTextures();

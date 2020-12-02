@@ -69,28 +69,31 @@ Mesh ModelLoader::processMesh(aiMesh* mesh, const aiScene* scene)
     for (unsigned int i = 0; i < mesh->mNumVertices; i++)
     {
         Vertex vertex;
-        glm::vec3 vector; // we declare a placeholder vector since assimp uses its own
         
-        // positions
-        vector.x = mesh->mVertices[i].x;
-        vector.y = mesh->mVertices[i].y;
-        vector.z = mesh->mVertices[i].z;
-        vertex.Position = vector;
-        // colors
-//        vector.x = color.r;
-//       vector.y = color.g;
-//        vector.z = color.b;
-//        vertex.Color = vector;
-        // texture coordinates
-        if (mesh->mTextureCoords[0])
+        // Positions
+        vertex.Position = glm::vec3(mesh->mVertices[i].x, mesh->mVertices[i].y, mesh->mVertices[i].z);
+        // Colors
+        for (int colorIndex = 0; colorIndex < AI_MAX_NUMBER_OF_COLOR_SETS; colorIndex++)
         {
-            glm::vec2 vec;
-            vec.x = mesh->mTextureCoords[0][i].x;
-            vec.y = mesh->mTextureCoords[0][i].y;
-            vertex.TexCoords = vec;
+            if (mesh->HasVertexColors(colorIndex)) {
+                aiColor4D *color = mesh->mColors[colorIndex];
+                vertex.Color = glm::vec4(color->r, color->g, color->b, color->a);
+                break;
+            }
         }
-        else
-            vertex.TexCoords = glm::vec2(0.0f, 0.0f);
+        // Normals
+        if (mesh->HasNormals()) {
+            vertex.Normal = glm::vec3(mesh->mNormals[i].x, mesh->mNormals[i].y, mesh->mNormals[i].z);
+        }
+        // Texture coordinates
+        for (int texCoordIndex = 0; texCoordIndex < AI_MAX_NUMBER_OF_TEXTURECOORDS; texCoordIndex++)
+        {
+            if (mesh->mTextureCoords[texCoordIndex])
+            {
+                vertex.TexCoords = glm::vec2(mesh->mTextureCoords[texCoordIndex][i].x, mesh->mTextureCoords[texCoordIndex][i].y);
+                break;
+            }
+        }
         vertices.push_back(vertex);
     }
     // retrieve the corresponding vertex indices.
@@ -150,8 +153,12 @@ void ModelLoader::processMaterial(aiMaterial* mat) {
     if (AI_SUCCESS == mat->Get(AI_MATKEY_COLOR_DIFFUSE, color)) {
         diffuseColor = new glm::vec3(color.r, color.g, color.b);
     }
-    Material* m = new Material(std::string(mat->GetName().C_Str()), diffuseColor,
-        files[aiTextureType_DIFFUSE]);
+
+    float shininess = 0;
+    aiGetMaterialFloat(mat, AI_MATKEY_SHININESS, &shininess);
+
+    Material* m = new Material(std::string(mat->GetName().C_Str()), diffuseColor, shininess,
+        files[aiTextureType_DIFFUSE], files[aiTextureType_NORMALS], files[aiTextureType_OPACITY]);
     if (m) {
         this->materials.push_back(m);
     }

@@ -8,6 +8,11 @@
 #include <glm/glm.hpp>
 #include <glm/ext.hpp>
 
+#define TEXTURE_DIFFUSE1 0x01
+#define TEXTURE_DIFFUSE2 0x02
+#define TEXTURE_NORMAL 0x04
+#define TEXTURE_ALPHA 0x08
+
 // Utils
 static char* filetobuf(char* file)
 {
@@ -77,13 +82,17 @@ SceneViewer::SceneViewer(int w, int h)
     glUniformMatrix4fv(projectionMatrixID, 1, GL_FALSE, value_ptr(projectionMatrix));
 
     // texture uniform
-    this->texturesCountID = glGetUniformLocation(shaderProgram, "texturesCount");
-    glUniform1i(texturesCountID, 1); // 1 to use texture
-    this->texturesID[0] = glGetUniformLocation(shaderProgram, "texture1");
-    this->texturesID[1] = glGetUniformLocation(shaderProgram, "texture2");
-    this->textOffsetID = glGetUniformLocation(shaderProgram, "textOffset");
-
-    diffuseColorID = glGetUniformLocation(shaderProgram, "diffuseColor");
+    this->usedTexturesID = glGetUniformLocation(shaderProgram, "usedTextures");
+    this->difuseTexturesIDs[0] = glGetUniformLocation(shaderProgram,
+        "diffuseTexture1");
+    this->difuseTexturesIDs[1] = glGetUniformLocation(shaderProgram,
+        "diffuseTexture2");
+    this->normalTextureID = glGetUniformLocation(shaderProgram,
+        "normalTexture");
+    this->alphaTextureID = glGetUniformLocation(shaderProgram, "alphaTexture");
+    this->textOffset = glGetUniformLocation(shaderProgram, "textOffset");
+    this->diffuseColorID = glGetUniformLocation(shaderProgram, "diffuseColor");
+    this->shininessID = glGetUniformLocation(shaderProgram, "shininess");
 
     /* Enable Z depth testing so objects closest to the viewpoint are in front */
     glEnable(GL_DEPTH_TEST);
@@ -120,24 +129,29 @@ void SceneViewer::setModelMatrix(glm::mat4 matrix)
 
 void SceneViewer::useTextures(int textureCounts, GLuint textures[], glm::vec2* textureOffset)
 {
-    glUniform1i(texturesCountID, textureCounts);
     if (textureOffset == nullptr) {
-        glUniform2fv(textOffsetID, 1, value_ptr(glm::vec2(0.0f)));
+        glUniform2fv(textOffset, 1, value_ptr(glm::vec2(0.0f)));
     }
     else {
-        glUniform2fv(textOffsetID, 1, value_ptr(*textureOffset));
+        glUniform2fv(textOffset, 1, value_ptr(*textureOffset));
     }
-    if (textureCounts >= 1) {
 
+    if (textureCounts >= 1) {
+        this->usedTextures = this->usedTextures | TEXTURE_DIFFUSE1;
         glActiveTexture(GL_TEXTURE0 + 3); // use Texture Unit 3 just because...
         glBindTexture(GL_TEXTURE_2D, textures[0]);
-        glUniform1i(this->texturesID[0], 3);
+        glUniform1i(this->difuseTexturesIDs[0], 3);
         if (textureCounts >= 2) {
+            this->usedTextures = this->usedTextures | TEXTURE_DIFFUSE2;
             glActiveTexture(GL_TEXTURE0 + 5);
             glBindTexture(GL_TEXTURE_2D, textures[1]);
-            glUniform1i(this->texturesID[1], 5);
+            glUniform1i(this->difuseTexturesIDs[1], 5);
         }
     }
+    else {
+        this->usedTextures = this->usedTextures & ~TEXTURE_DIFFUSE1 & ~TEXTURE_DIFFUSE2;
+    }
+    glUniform1i(this->usedTexturesID, this->usedTextures);
 }
 
 void SceneViewer::setDiffuseColor(glm::vec3 color)
@@ -149,6 +163,9 @@ void SceneViewer::swapBuffers()
 {
     /* Swap our buffers to make our changes visible */
     SDL_GL_SwapWindow(window);
+
+    usedTextures = 0;
+    glUniform1i(this->usedTexturesID, usedTextures);
 }
 
 void SceneViewer::genProgram() {

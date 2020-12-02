@@ -21,10 +21,14 @@ class SceneViewer
 	glm::mat4 viewMatrix;
 	glm::mat4 projectionMatrix;
 
-	GLint texturesCountID = -1;
-	GLuint texturesID[2];
-	GLint textOffsetID = -1;
+	int usedTextures = 0;
+	GLint usedTexturesID = -1;
+	GLuint difuseTexturesIDs[2];
+	GLint normalTextureID;
+	GLint alphaTextureID;
+	GLint textOffset = -1;
 	GLint diffuseColorID = -1;
+	GLint shininessID = -1;
 
 	void genProgram();
 

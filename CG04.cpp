@@ -60,7 +60,7 @@ int main(int argc, char* argv[])
 
     SceneViewer viewer(800, 600);
     Scene scene;
-
+/*
     Tree3D* tree1 = new Tree3D();
     tree1->transform = 
         glm::translate(tree1->transform, glm::vec3(-2.0f, 0.0f, -2.0f));
@@ -80,13 +80,23 @@ int main(int argc, char* argv[])
     house->transform = glm::translate(glm::mat4(1.0f), glm::vec3(-1, 0, -10));
     house->transform = glm::rotate(house->transform, glm::radians(30.0f), glm::vec3(0.0f, 1.0f, 0.0f));
     scene.add(house);
+    */
+    ModelLoader oldHouse("Old House 2 3D Models.dae");
+    if (oldHouse.root) {
+        scene.add(oldHouse.root);
+        oldHouse.root->transform = glm::translate(glm::mat4(1.0f), glm::vec3(10.0f, -0.8f, -10.0f));
+    }
+    ModelLoader towerModel("wooden watch tower.dae");
+    if (towerModel.root) {
+        scene.add(towerModel.root);
+        towerModel.root->transform = glm::translate(glm::mat4(1.0f), glm::vec3(-5.0f, -0.8f, -2.0f));
+    }
 
-    ModelLoader myModel("Old House 2 3D Models.dae");
-    //ModelLoader myModel("wooden watch tower.dae");
+    ModelLoader truckModel("Pick-Up.blend");
     Node3D* truck = nullptr;
-    if (myModel.root) {
-        scene.add(myModel.root);
-        truck = myModel.root->getNodeByName("Truck");
+    if (truckModel.root) {
+        truck = truckModel.root->getNodeByName("Truck");
+        scene.add(truck);
     }
 
     Fire3D* fire = new Fire3D();
