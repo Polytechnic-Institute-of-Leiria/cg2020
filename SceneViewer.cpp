@@ -130,6 +130,13 @@ void SceneViewer::translateCamera(glm::vec3 translation)
     glUniformMatrix4fv(viewMatrixID, 1, GL_FALSE, value_ptr(viewMatrix));
 }
 
+glm::vec3 SceneViewer::getCameraPosition()
+{
+    glm::vec4 p = glm::inverse(this->viewMatrix) * glm::vec4(0.0f, .0f, .0f, 1.0f);
+    return glm::vec3(p.x, p.y, p.z);
+}
+
+
 void SceneViewer::setModelMatrix(glm::mat4 matrix)
 {
     glUniformMatrix4fv(this->modelMatrixID, 1, GL_FALSE, value_ptr(matrix));
@@ -193,6 +200,11 @@ void SceneViewer::setDiffuseColor(glm::vec3 color)
     glUniform3fv(this->diffuseColorID, 1, value_ptr(color));
 }
 
+void SceneViewer::setSpecular(GLfloat specular)
+{
+    glUniform1f(this->specularID, specular);
+}
+
 void SceneViewer::swapBuffers()
 {
     /* Swap our buffers to make our changes visible */
@@ -200,6 +212,11 @@ void SceneViewer::swapBuffers()
 
     usedTextures = 0;
     glUniform1i(this->usedTexturesID, usedTextures);
+}
+
+void SceneViewer::setLightPosition(glm::vec3 position)
+{
+    glUniform3fv(this->lightPositionID, 1, value_ptr(position));
 }
 
 void SceneViewer::genProgram() {

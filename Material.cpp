@@ -3,12 +3,12 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
-Material::Material(std::string name, glm::vec3* diffuseColor, GLfloat shininess, std::string
+Material::Material(std::string name, glm::vec3* diffuseColor, GLfloat specular, std::string
 	* diffuseTextureFile, std::string* normalTextureFile, std::string* alphaTextureFile)
 {
 	this->name = name;
 	this->diffuseColor = diffuseColor;
-	this->shininess = shininess;
+	this->specular = specular;
 	this->diffuseTextureFile = diffuseTextureFile;
 	this->normalTextureFile = normalTextureFile;
 	this->alphaTextureFile = alphaTextureFile;

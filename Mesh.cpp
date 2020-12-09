@@ -49,6 +49,7 @@ void Mesh::draw(SceneViewer* viewer, bool transparent)
 		viewer->useTextures(material->diffuseCount(), material->getDiffuseTextures());
 		viewer->setNormalTexture(material->getNormalTexture());
 		viewer->setAlphaTexture(material->getAlphaTexture());
+		viewer->setSpecular(material->getSpecular());
 	}
 	else {
 		viewer->useTextures(0, nullptr);

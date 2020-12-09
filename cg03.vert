@@ -16,6 +16,8 @@ out vec4 ex_Color;
 out vec2 ex_TexCoord;
 out vec3 ex_Normal;
 
+out vec3 viewPosition;
+
 void main(void) {
 	mat4 vmMatrix;
 	mat4 pvmMatrix;
@@ -30,4 +32,6 @@ void main(void) {
 	ex_Color = vec4(in_Color, 1.0);
 	ex_TexCoord = in_TexCoord;
 	ex_Normal = normalize(vec3(model * vec4(in_Normal, 1.0)));
+
+	viewPosition = vec3(inverse(view) * vec4(0.0, 0.0, 0.0, 1.0));
 }

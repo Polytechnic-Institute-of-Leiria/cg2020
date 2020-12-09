@@ -10,6 +10,8 @@ in vec4 ex_Color;
 in vec2 ex_TexCoord;
 in vec3 ex_Normal;
 
+in vec3 viewPosition;
+
 out vec4 FragColor;
 
 uniform int usedTextures;
@@ -31,13 +33,19 @@ void main(void) {
 
     vec4 ambient_color;
     vec4 diffuse_color;
+    vec4 specular_color;
 
     vec4 pointColor;
 
     vec3 lightPointDir = normalize(ex_Position - lightPosition);
     vec3 normal;
 
-    normal = ex_Normal;
+    if ((usedTextures & TEXTURE_NORMAL) != 0) {
+        normal = texture(normalTexture, ex_TexCoord + textOffset).rgb;
+        normal = normalize(normal * 2.0 - 1.0);
+    } else {
+        normal = ex_Normal;
+    }
 
   if (usedTextures==0) {
     // Pass through our original color with full opacity.
@@ -54,16 +62,21 @@ void main(void) {
 
   // ambient
   ambient_color = pointColor * vec4(ambientComponent, 1.0);
+ 
   // diffuse
-  float diffStrength = dot(normal, lightPointDir);
+  float diffStrength = dot(normal, -lightPointDir);
   if (diffStrength<0) {
     diffStrength *= -1;
   }
   diffuse_color = pointColor * diffStrength;
  
+  // specular
+  vec3 pointViewDir = normalize(viewPosition - ex_Position);
+  vec3 reflectDir = reflect(lightPointDir, normal);
+  float spec = pow(max(dot(pointViewDir, reflectDir), 0.0), 32);
+  specular_color = specular / 100 * spec * vec4(lightColor, 1.0);
 
-
-  FragColor = ambient_color + diffuse_color; // + specular_color;
+  FragColor = ambient_color + diffuse_color + specular_color;
 
   if ((usedTextures & TEXTURE_ALPHA)!=0) {
     FragColor[3] = texture(alphaTexture, ex_TexCoord + textOffset)[0];

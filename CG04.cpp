@@ -156,9 +156,11 @@ int main(int argc, char* argv[])
         }
         if (cameraKeys[2]) {
             viewer.translateCamera(glm::vec3(0.f, 0.0f, 0.05f));
+            //viewer.setLightPosition(viewer.getCameraPosition());
         }
         if (cameraKeys[3]) {
             viewer.translateCamera(glm::vec3(0.0f, 0.0f, -0.05f));
+            //viewer.setLightPosition(viewer.getCameraPosition());
         }
 
         /* Game Loop */

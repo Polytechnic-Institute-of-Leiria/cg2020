@@ -7,7 +7,7 @@
 class Material {
 	std::string name;
 	glm::vec3* diffuseColor;
-	GLfloat shininess = 0;
+	GLfloat specular = 0;
 	std::string* diffuseTextureFile;
 	GLuint diffuseTexture = 0;
 	std::string* normalTextureFile;
@@ -28,6 +28,7 @@ public:
 	}
 	inline GLuint getNormalTexture() { return normalTexture; }
 	inline GLuint getAlphaTexture() { return alphaTexture; }
+	inline GLfloat getSpecular() { return specular; }
 
 };
 

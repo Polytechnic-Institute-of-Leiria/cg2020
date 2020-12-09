@@ -41,6 +41,7 @@ public:
 
 	void rotateCamera(float angle, glm::vec3 axis);
 	void translateCamera(glm::vec3 translation);
+	glm::vec3 getCameraPosition();
 
 	void setModelMatrix(glm::mat4 matrix);
 	void useTextures(int textureCounts, GLuint textures[], glm::vec2* textureOffset = nullptr);
@@ -48,6 +49,9 @@ public:
 	void setNormalTexture(GLuint textureId);
 
 	void setDiffuseColor(glm::vec3 color);
+	void setSpecular(GLfloat specular);
 	void swapBuffers();
+
+	void setLightPosition(glm::vec3 position);
 };
 
