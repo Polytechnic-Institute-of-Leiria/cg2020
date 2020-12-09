@@ -34,16 +34,17 @@ Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, Mate
 	glBindVertexArray(0);
 }
 
-void Mesh::draw(SceneViewer* viewer)
+void Mesh::draw(SceneViewer* viewer, bool transparent)
 {
+	if (transparent != (material != nullptr && material->getAlphaTexture() > 0)) {
+		return;
+	}
+
 	if (this->material != nullptr) {
-		if (this->material->diffuseCount() > 0) {
-			viewer->useTextures(this->material->diffuseCount(), this->material->getDiffuseTextures());
-		}
-		else {
-			viewer->useTextures(0, nullptr);
-			viewer->setDiffuseColor(this->material->getDiffuseColor());
-		}
+		viewer->setDiffuseColor(material->getDiffuseColor());
+		viewer->useTextures(material->diffuseCount(), material->getDiffuseTextures());
+		viewer->setNormalTexture(material->getNormalTexture());
+		viewer->setAlphaTexture(material->getAlphaTexture());
 	}
 	else {
 		viewer->useTextures(0, nullptr);

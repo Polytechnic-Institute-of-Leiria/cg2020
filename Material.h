@@ -26,6 +26,9 @@ public:
 	inline glm::vec3 getDiffuseColor() {
 		return diffuseColor ? *diffuseColor : glm::vec3(0.0f);
 	}
+	inline GLuint getNormalTexture() { return normalTexture; }
+	inline GLuint getAlphaTexture() { return alphaTexture; }
+
 };
 
 

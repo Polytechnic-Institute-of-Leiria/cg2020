@@ -83,8 +83,11 @@ void Fire3D::setFrame(int frame)
 
 }
 
-void Fire3D::draw(SceneViewer* v)
+void Fire3D::draw(SceneViewer* v, bool transparent)
 {
+	if (!transparent) {
+		return;
+	}
 //	v->setModelMatrix(this->transform); // already done by the scene!
 	glBindVertexArray(vao);
 	v->useTextures(1, &textureId, &this->textureOffset);

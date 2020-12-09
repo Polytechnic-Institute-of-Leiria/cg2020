@@ -23,6 +23,6 @@ public:
 	~Fire3D();
 
 	void setFrame(int frame);
-	void draw(SceneViewer* v);
+	void draw(SceneViewer* v, bool transparent = false);
 };
 

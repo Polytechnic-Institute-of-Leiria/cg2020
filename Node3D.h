@@ -14,7 +14,7 @@ class Node3D : public Object3D
 
 public:
 	Node3D(Node3D* parent = nullptr);
-	void draw(SceneViewer* v);
+	void draw(SceneViewer* v, bool transparent = false);
 	std::vector<Mesh> meshes;
 	std::string name;
 

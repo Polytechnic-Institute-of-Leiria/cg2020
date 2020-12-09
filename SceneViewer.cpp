@@ -154,6 +154,32 @@ void SceneViewer::useTextures(int textureCounts, GLuint textures[], glm::vec2* t
     glUniform1i(this->usedTexturesID, this->usedTextures);
 }
 
+void SceneViewer::setAlphaTexture(GLuint textureId) {
+    if (textureId) {
+        this->usedTextures |= TEXTURE_ALPHA;
+        glActiveTexture(GL_TEXTURE0 + 7);
+        glBindTexture(GL_TEXTURE_2D, textureId);
+        glUniform1i(this->alphaTextureID, 7);
+    }
+    else {
+        this->usedTextures &= ~TEXTURE_ALPHA;
+    }
+    glUniform1i(this->usedTexturesID, this->usedTextures);
+}
+
+void SceneViewer::setNormalTexture(GLuint textureId) {
+    if (textureId) {
+        this->usedTextures |= TEXTURE_NORMAL;
+        glActiveTexture(GL_TEXTURE0 + 8);
+        glBindTexture(GL_TEXTURE_2D, textureId);
+        glUniform1i(this->normalTextureID, 8);
+    }
+    else {
+        this->usedTextures &= ~TEXTURE_NORMAL;
+    }
+    glUniform1i(this->usedTexturesID, this->usedTextures);
+}
+
 void SceneViewer::setDiffuseColor(glm::vec3 color)
 {
     glUniform3fv(this->diffuseColorID, 1, value_ptr(color));

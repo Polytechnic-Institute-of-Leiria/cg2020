@@ -10,10 +10,17 @@ void Scene::add(Object3D* obj)
 
 void Scene::draw(SceneViewer* viewer)
 {
+	// draw opaque geometry (non transparent)
 	for (Object3D* o : this->objects)
 	{
 		viewer->setModelMatrix(o->transform);
 		o->draw(viewer);
+	}
+	// Draw transparent geometry
+	for (Object3D* o : this->objects)
+	{
+		viewer->setModelMatrix(o->transform);
+		o->draw(viewer, true);
 	}
 }
 

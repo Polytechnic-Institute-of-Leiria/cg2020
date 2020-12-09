@@ -41,6 +41,9 @@ public:
 
 	void setModelMatrix(glm::mat4 matrix);
 	void useTextures(int textureCounts, GLuint textures[], glm::vec2* textureOffset = nullptr);
+	void setAlphaTexture(GLuint textureId);
+	void setNormalTexture(GLuint textureId);
+
 	void setDiffuseColor(glm::vec3 color);
 	void swapBuffers();
 };

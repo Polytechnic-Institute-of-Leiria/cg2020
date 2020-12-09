@@ -17,15 +17,15 @@ Node3D::Node3D(Node3D* parent)
     this->transform = glm::mat4(1.0f);
 }
 
-void Node3D::draw(SceneViewer* viewer)
+void Node3D::draw(SceneViewer* viewer, bool transparent)
 {
     for (Node3D *n: this->children)
     {
-        n->draw(viewer);
+        n->draw(viewer, transparent);
     }
     viewer->setModelMatrix(this->getAccumulatedTransform());
     for (Mesh m : this->meshes) {
-        m.draw(viewer);
+        m.draw(viewer, transparent);
     }
 }
 

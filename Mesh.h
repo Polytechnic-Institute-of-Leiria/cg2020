@@ -27,5 +27,5 @@ public:
 	Mesh(std::vector<Vertex> vertices, std::vector<unsigned int>
 		indices, Material *m);
 	// render the mesh
-	void draw(SceneViewer* viewer);
+	void draw(SceneViewer* viewer, bool transparent = false);
 };
