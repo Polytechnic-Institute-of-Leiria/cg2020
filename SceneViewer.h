@@ -28,7 +28,10 @@ class SceneViewer
 	GLint alphaTextureID;
 	GLint textOffset = -1;
 	GLint diffuseColorID = -1;
-	GLint shininessID = -1;
+	GLint specularID = 0;
+	GLint ambientComponentID = 0;
+	GLint lightPositionID = 0;
+	GLint lightColorID = 0;
 
 	void genProgram();
 

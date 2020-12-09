@@ -5,8 +5,10 @@
 #define TEXTURE_NORMAL 0x04
 #define TEXTURE_ALPHA 0x08
 
-in vec3 ex_Color;
+in vec3 ex_Position;
+in vec4 ex_Color;
 in vec2 ex_TexCoord;
+in vec3 ex_Normal;
 
 out vec4 FragColor;
 
@@ -17,23 +19,51 @@ uniform sampler2D normalTexture;
 uniform sampler2D alphaTexture;
 
 uniform vec3 diffuseColor;
-uniform float shininess;
+uniform float specular;
 uniform vec2 textOffset;
 
+// Light model
+uniform vec3 ambientComponent;
+uniform vec3 lightPosition;
+uniform vec3 lightColor;
+
 void main(void) {
+
+    vec4 ambient_color;
+    vec4 diffuse_color;
+
+    vec4 pointColor;
+
+    vec3 lightPointDir = normalize(ex_Position - lightPosition);
+    vec3 normal;
+
+    normal = ex_Normal;
+
   if (usedTextures==0) {
     // Pass through our original color with full opacity.
-    //FragColor = vec4(ex_Color,1.0);
-    FragColor = vec4(diffuseColor,1.0);
+    pointColor = vec4(diffuseColor * lightColor, 1);
   }
   else if ((usedTextures & TEXTURE_DIFFUSE1)!=0 && (usedTextures & TEXTURE_DIFFUSE2)==0){
     // using diffuse texture 1 but not texture 2
-    FragColor = texture(diffuseTexture1, ex_TexCoord + textOffset);
+    pointColor = texture(diffuseTexture1, ex_TexCoord + textOffset) * vec4(lightColor, 1.0);
   }
   else if ((usedTextures & TEXTURE_DIFFUSE1)!=0 && (usedTextures & TEXTURE_DIFFUSE2)!=0){
     // using diffuse texture 1 and 2
-    FragColor = mix(texture(diffuseTexture1, ex_TexCoord + textOffset), texture(diffuseTexture2, ex_TexCoord + textOffset), 0.5);
+    pointColor = mix(texture(diffuseTexture1, ex_TexCoord + textOffset), texture(diffuseTexture2, ex_TexCoord + textOffset), 0.5) * vec4(lightColor, 1.0);
   }
+
+  // ambient
+  ambient_color = pointColor * vec4(ambientComponent, 1.0);
+  // diffuse
+  float diffStrength = dot(normal, lightPointDir);
+  if (diffStrength<0) {
+    diffStrength *= -1;
+  }
+  diffuse_color = pointColor * diffStrength;
+ 
+
+
+  FragColor = ambient_color + diffuse_color; // + specular_color;
 
   if ((usedTextures & TEXTURE_ALPHA)!=0) {
     FragColor[3] = texture(alphaTexture, ex_TexCoord + textOffset)[0];

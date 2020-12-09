@@ -92,7 +92,15 @@ SceneViewer::SceneViewer(int w, int h)
     this->alphaTextureID = glGetUniformLocation(shaderProgram, "alphaTexture");
     this->textOffset = glGetUniformLocation(shaderProgram, "textOffset");
     this->diffuseColorID = glGetUniformLocation(shaderProgram, "diffuseColor");
-    this->shininessID = glGetUniformLocation(shaderProgram, "shininess");
+    this->specularID = glGetUniformLocation(shaderProgram, "specular");
+
+    this->ambientComponentID = glGetUniformLocation(shaderProgram, "ambientComponent");
+    glUniform3fv(this->ambientComponentID, 1, value_ptr(glm::vec3(.2f, .2f, 0.2f))); // default ambient "light"
+
+    this->lightPositionID = glGetUniformLocation(shaderProgram, "lightPosition");
+    glUniform3fv(this->lightPositionID, 1, value_ptr(glm::vec3(1.0f, 3.0f, 0.0f)));
+    this->lightColorID = glGetUniformLocation(shaderProgram, "lightColor");
+    glUniform3fv(this->lightColorID, 1, value_ptr(glm::vec3(0.8f, 0.8f, .8f)));
 
     /* Enable Z depth testing so objects closest to the viewpoint are in front */
     glEnable(GL_DEPTH_TEST);
@@ -265,6 +273,7 @@ void SceneViewer::genProgram() {
     glBindAttribLocation(shaderProgram, 0, "in_Position");
     glBindAttribLocation(shaderProgram, 1, "in_Color");
     glBindAttribLocation(shaderProgram, 2, "in_TexCoord");
+    glBindAttribLocation(shaderProgram, 3, "in_Normal");
 
     glLinkProgram(shaderProgram);
     glGetProgramiv(shaderProgram, GL_LINK_STATUS, (int*)&IsLinked);
